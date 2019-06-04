@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yundao.dao.UserInfoDao">
+
+    <resultMap id="UserInfoWithLoginMap" type="UserInfo">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="roleId" column="role_id"/>
+        <result property="tel" column="tel"/>
+        <result property="email" column="email"/>
+        <result property="createDate" column="create_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="modifyBy" column="modify_by"/>
+        <!-- 一对多 【ofType是映射到list集合属性中pojo的类型】 -->
+        <collection property="userLogins" ofType="UserLogin">
+            <id property="id" column="pid"/>
+            <result property="userId" column="puser_id"/>
+            <result property="account" column="account"/>
+            <result property="password" column="password"/>
+            <result property="loginType" column="login_type"/>
+            <result property="createDate" column="pcreate_date"/>
+            <result property="createBy" column="pcreate_by"/>
+            <result property="modifyDate" column="pmodify_date"/>
+            <result property="modifyBy" column="pmodify_by"/>
+        </collection>
+    </resultMap>
+
+    <select id="userLogin" resultType="UserLogin">
+        select * from user_login where account = #{account}
+    </select>
+
+    <select id="listUserInfo" resultType="UserInfo">
+        select * from user_info
+    </select>
+
+    <select id="getUserByUserId" resultType="UserInfo">
+        select * from user_info where user_id = #{userId}
+    </select>
+
+    <insert id="insertUserInfo" parameterType="UserInfo">
+        insert into user_info values(#{id},#{userId},#{userName},#{tel},#{email},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
+    </insert>
+
+    <delete id="deleteUserByUserId">
+        delete from user_info where user_id = #{userId}
+    </delete>
+
+    <update id="updateUserInfo" parameterType="UserInfo">
+        update user_info set user_name = #{userName},tel = #{tel},email = #{email},modify_date = #{modifyDate},modify_by = #{modifyBy} where user_id = #{userId}
+    </update>
+
+    <select id="getUserByUserIdWithLogin" resultMap="UserInfoWithLoginMap">
+        select u.*,p.id pid,p.user_id puser_id,p.account,p.password,p.login_type,p.create_date pcreate_date,p.create_by pcreate_by,p.modify_date pmodify_date,p.modify_by pmodify_by
+        from user_info u,user_login p
+        where u.user_id = p.user_id and u.user_id = #{userId}
+    </select>
+</mapper>
