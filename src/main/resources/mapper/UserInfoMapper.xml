@@ -41,8 +41,12 @@
         select * from user_info where user_id = #{userId}
     </select>
 
-    <insert id="insertUserInfo" parameterType="UserInfo">
-        insert into user_info values(#{id},#{userId},#{userName},#{tel},#{email},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
+    <insert id="insertUserInfo" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into user_info values(#{id},#{userId},#{userName},#{roleId},#{tel},#{email},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
+    </insert>
+
+    <insert id="insertUserLogin" parameterType="UserLogin">
+        insert into user_login values(#{id},#{userId},#{account},#{password},#{loginType},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
     </insert>
 
     <delete id="deleteUserByUserId">
@@ -50,7 +54,7 @@
     </delete>
 
     <update id="updateUserInfo" parameterType="UserInfo">
-        update user_info set user_name = #{userName},tel = #{tel},email = #{email},modify_date = #{modifyDate},modify_by = #{modifyBy} where user_id = #{userId}
+        update user_info set user_name = #{userName},tel = #{tel},email = #{email},role_id = #{roleId},modify_date = #{modifyDate},modify_by = #{modifyBy} where user_id = #{userId}
     </update>
 
     <select id="getUserByUserIdWithLogin" resultMap="UserInfoWithLoginMap">
@@ -58,4 +62,20 @@
         from user_info u,user_login p
         where u.user_id = p.user_id and u.user_id = #{userId}
     </select>
+
+    <select id="checkUserInfoByName" resultType="UserInfo">
+        select * from user_info where user_name = #{userName}
+    </select>
+
+    <select id="checkUserInfoByTel" resultType="UserInfo">
+        select * from user_info where tel = #{tel}
+    </select>
+
+    <select id="checkUserInfoByEmail" resultType="UserInfo">
+        select * from user_info where email = #{email}
+    </select>
+
+    <update id="modifyPassword">
+        update user_login set password = #{password} where account = #{account}
+    </update>
 </mapper>

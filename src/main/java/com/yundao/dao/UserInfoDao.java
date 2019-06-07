@@ -21,5 +21,15 @@ public interface UserInfoDao {
 
     int insertUserInfo(UserInfo userInfo);
 
+    int insertUserLogin(UserLogin userLogin);
+
     int updateUserInfo(UserInfo userInfo);
+
+    List<UserInfo> checkUserInfoByName(String userName);
+
+    List<UserInfo> checkUserInfoByTel(String tel);
+
+    List<UserInfo> checkUserInfoByEmail(String email);
+
+    int modifyPassword(String account, String password);
 }

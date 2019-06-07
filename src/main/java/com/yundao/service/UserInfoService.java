@@ -1,9 +1,18 @@
 package com.yundao.service;
 
 import com.yundao.bean.UserInfo;
+import com.yundao.bean.UserLogin;
 import com.yundao.common.ResponseResult;
 
 public interface UserInfoService {
+
+    boolean checkUserParameter(UserInfo userInfo);
+
+    boolean checkUserExist(UserInfo userInfo);
+
+    ResponseResult modifyPassword(String account, String oldPass, String newPass);
+
+    ResponseResult userRegister(UserInfo userInfo, UserLogin userLogin);
 
     ResponseResult userLogin(String account, String pass);
 

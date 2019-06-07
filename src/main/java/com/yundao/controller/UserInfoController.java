@@ -1,11 +1,15 @@
 package com.yundao.controller;
 
 import com.yundao.bean.UserInfo;
+import com.yundao.bean.UserLogin;
 import com.yundao.common.PassToken;
 import com.yundao.common.ResponseResult;
 import com.yundao.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @RestController
 public class UserInfoController {
@@ -34,6 +38,11 @@ public class UserInfoController {
         return userInfoService.getUserByUserIdWithLogin(userId);
     }
 
+    @PostMapping("/userRegister")
+    public ResponseResult insertUserInfo(UserInfo userInfo, UserLogin userLogin) {
+        return userInfoService.userRegister(userInfo, userLogin);
+    }
+
     @PostMapping("/userInfo")
     public ResponseResult insertUserInfo(UserInfo userInfo) {
         return userInfoService.insertUserInfo(userInfo);
@@ -47,5 +56,10 @@ public class UserInfoController {
     @PutMapping("/userInfo")
     public ResponseResult updateUserInfo(UserInfo userInfo) {
         return userInfoService.updateUserInfo(userInfo);
+    }
+
+    @PutMapping("/userLogin/{account}/{oldPass}/{newPass}")
+    public ResponseResult modifyPassword(@PathVariable("account") String account, @PathVariable("oldPass") String oldPass, @PathVariable("newPass") String newPass) {
+        return userInfoService.modifyPassword(account, oldPass, newPass);
     }
 }

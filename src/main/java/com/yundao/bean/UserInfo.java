@@ -14,6 +14,21 @@ public class UserInfo extends BaseInfo {
     private List<UserLogin> userLogins;
     private List<UserClass> userClasses;
 
+    @Override
+    public String toString() {
+
+        return  "UserInfo{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", tel='" + tel + '\'' +
+                ", email='" + email + '\'' +
+                ", roleInfo=" + roleInfo +
+                ", userLogins=" + userLogins +
+                ", userClasses=" + userClasses +
+                '}';
+    }
+
     public String getUserId() {
         return userId;
     }

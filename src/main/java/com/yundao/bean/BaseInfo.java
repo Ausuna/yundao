@@ -9,8 +9,20 @@ public class BaseInfo {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
     private String createBy;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyDate;
     private String modifyBy;
+
+    @Override
+    public String toString() {
+        return "BaseInfo{" +
+                "id=" + id +
+                ", createDate=" + createDate +
+                ", createBy='" + createBy + '\'' +
+                ", modifyDate=" + modifyDate +
+                ", modifyBy='" + modifyBy + '\'' +
+                '}';
+    }
 
     public int getId() {
         return id;

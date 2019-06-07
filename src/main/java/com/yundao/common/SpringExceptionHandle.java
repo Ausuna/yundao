@@ -102,6 +102,7 @@ public class SpringExceptionHandle {
     @ResponseBody
     @ResponseStatus(value=HttpStatus.METHOD_NOT_ALLOWED)
     public ResponseResult<String> notAllowed(Exception e){
+        e.printStackTrace();
         logger.error("occurs error when execute method ,message {}",e.getMessage());
         return new ResponseResult<>(false, UnicomResponseEnums.METHOD_NOT_ALLOWED);
     }
