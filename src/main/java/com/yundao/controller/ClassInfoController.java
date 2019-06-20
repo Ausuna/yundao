@@ -12,14 +12,30 @@ public class ClassInfoController {
     @Autowired
     ClassInfoService classInfoService;
 
-    @GetMapping("/classInfo")
-    public ResponseResult listClassInfo() {
-        return classInfoService.listClassInfo();
+
+    @GetMapping("/classInfo/{pageIndex}/{pageSize}")
+    public ResponseResult listClassInfo(@PathVariable("pageIndex") int pageIndex,@PathVariable("pageSize") int pageSize) {
+        return classInfoService.listClassInfo(pageIndex, pageSize);
     }
 
+    /**
+     * 创建班级
+     * @param classInfo 班级信息
+     * @return
+     */
     @PostMapping("/classInfo")
-    public ResponseResult insertClassInfo(ClassInfo classInfo) {
-        return classInfoService.insertClassInfo(classInfo);
+    public ResponseResult createClass(ClassInfo classInfo) {
+        return classInfoService.createClass(classInfo);
+    }
+
+    /**
+     * 根据班级id加入班级
+     * @param classId
+     * @return
+     */
+    @PostMapping("/userClass/{classId}")
+    public ResponseResult joinClass(@PathVariable("classId") String classId) {
+        return classInfoService.joinClass(classId);
     }
 
     @PutMapping("/classInfo")
@@ -28,7 +44,7 @@ public class ClassInfoController {
     }
 
     @DeleteMapping("/classInfo/{classId}")
-    public ResponseResult deleteClassInfo(@PathVariable("classId") int classId) {
+    public ResponseResult deleteClassInfo(@PathVariable("classId") String classId) {
         System.out.println(classId);
         return classInfoService.deleteClassInfo(classId);
     }

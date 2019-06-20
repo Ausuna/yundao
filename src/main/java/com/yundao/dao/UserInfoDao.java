@@ -17,7 +17,11 @@ public interface UserInfoDao {
 
     UserInfo getUserByUserIdWithLogin(String userId);
 
+    UserInfo getUserByAccount(String account);
+
     int deleteUserByUserId(String userId);
+
+    int deleteUserLoginByUserId(String userId);
 
     int insertUserInfo(UserInfo userInfo);
 
@@ -31,5 +35,5 @@ public interface UserInfoDao {
 
     List<UserInfo> checkUserInfoByEmail(String email);
 
-    int modifyPassword(String account, String password);
+    int modifyPassword(UserLogin userLogin);
 }

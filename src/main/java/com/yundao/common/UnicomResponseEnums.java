@@ -15,7 +15,7 @@ public enum  UnicomResponseEnums {
     INVALID_PASSWORD("003","密码错误"),
     NO_PERMISSION("004","非法请求！"),
     SUCCESS_OPTION("005","操作成功！"),
-    NOT_MATCH("007","用户名和密码不匹配"),
+    REPEAT_JOINCLASS("007","重复加入班级"),
     FAIL_GETDATA("008","获取信息失败"),
     BAD_REQUEST_TYPE("009","错误的请求类型"),
     INVALID_MOBILE("010","无效的手机号码"),
@@ -33,7 +33,12 @@ public enum  UnicomResponseEnums {
     FILEUPLOAD_SUCCESS("022","上传成功"),
     NOLOGIN("023","未登录"),
     INSERT_FAIL("024","添加数据失败"),
-    ERROR_IDCODE("025","验证码不正确");
+    ERROR_IDCODE("025","验证码不正确"),
+    INVALID_CLASS("026","无效的班级名称"),
+    INVALID_COURSE("027","无效的课程名称"),
+    INVALID_TIME("028","无效的课时"),
+    INVALID_COLLEGE("029","无效的学院名称"),
+    INVALID_TERM("030","无效的学期名称");
 
     private String code;
     private String msg;

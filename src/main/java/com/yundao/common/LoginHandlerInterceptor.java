@@ -5,7 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.yundao.bean.UserInfo;
 import com.yundao.bean.UserLogin;
+import com.yundao.bean.UserSession;
 import com.yundao.dao.UserInfoDao;
 import com.yundao.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
         if (token == null) {
             throw new UnicomRuntimeException(UnicomResponseEnums.NOLOGIN, "请先进行登录");
         }
-        // 获取 token 中的 user id
+        // 获取 token 中的 帐号
         String account;
         try {
             account = JWT.decode(token).getAudience().get(0);
@@ -77,7 +79,9 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
                 throw new UnicomRuntimeException(UnicomResponseEnums.NOLOGIN, "验证失败，请重新登录");
             }
 
-            //token过期
+            UserInfo user = userInfoDao.getUserByAccount(account);
+            UserSession.set("currentUser",user);
+            //更新token
             newToken = tokenUtil.getToken(userLogin.getAccount(), userLogin.getPassword());
             response.setHeader("token", newToken);
             return true;

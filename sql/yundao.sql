@@ -159,7 +159,6 @@ create table user_class
    id                     int not null auto_increment,
    user_id                VARCHAR(64) not null,
    class_id               VARCHAR(64) not null,
-	 role_id                VARCHAR(64) not null,
 	 grade                  int,
 	 create_date            datetime,
    create_by              varchar(64),
@@ -167,8 +166,7 @@ create table user_class
    modify_by              varchar(64),
    primary key (id),
 	 FOREIGN KEY (user_id)  REFERENCES user_info (user_id),
-	 FOREIGN KEY (class_id) REFERENCES class_info (class_id),
-	 FOREIGN KEY (role_id)  REFERENCES role_info (role_id)
+	 FOREIGN KEY (class_id) REFERENCES class_info (class_id)
 );
 
 insert into user_class values(null,'00003','20001','40002',10,'2019.4.26','admin','2019.4.26','admin');

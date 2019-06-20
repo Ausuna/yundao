@@ -17,4 +17,6 @@ public class TokenUtil {
                 .sign(Algorithm.HMAC256(password));
         return token;
     }
+
+
 }

@@ -4,10 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yundao.bean.UserInfo;
 import com.yundao.bean.UserLogin;
-import com.yundao.common.ResponseResult;
-import com.yundao.common.TokenUtil;
-import com.yundao.common.UnicomResponseEnums;
-import com.yundao.common.UnicomRuntimeException;
+import com.yundao.bean.UserSession;
+import com.yundao.common.*;
 import com.yundao.dao.UserInfoDao;
 import com.yundao.service.UserInfoService;
 import org.springframework.beans.BeanUtils;
@@ -68,46 +66,62 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     @Override
     public ResponseResult userRegister(UserInfo userInfo, UserLogin userLogin) {
-        try {
-            if(checkUserParameter(userInfo)) {
-                if(checkUserExist(userInfo)) {
-                    Date date = new Date();
-                    userInfo.setCreateDate(date);
-                    userInfo.setModifyDate(date);
-                    userInfoDao.insertUserInfo(userInfo);
 
-                    UserLogin userLogin1 = new UserLogin();
-                    BeanUtils.copyProperties(userLogin, userLogin1);
-                    userLogin1.setCreateDate(date);
-                    userLogin1.setModifyDate(date);
-                    userLogin1.setAccount(userInfo.getUserName());
-                    userLogin1.setLoginType("username");
-                    userInfoDao.insertUserLogin(userLogin1);
+        if(checkUserParameter(userInfo)) {
+            if(checkUserExist(userInfo)) {
+                Date date = new Date();
+                userInfo.setCreateDate(date);
+                userInfo.setCreateBy(userInfo.getUserName());
+                userInfo.setModifyDate(date);
+                userInfo.setModifyBy(userInfo.getUserName());
+                userInfo.setUserId(IdUtil.createID());
+                userInfoDao.insertUserInfo(userInfo);
 
-                    UserLogin userLogin2 = new UserLogin();
-                    BeanUtils.copyProperties(userLogin, userLogin2);
-                    userLogin2.setCreateDate(date);
-                    userLogin2.setModifyDate(date);
-                    userLogin2.setAccount(userInfo.getTel());
-                    userLogin2.setLoginType("tel");
-                    userInfoDao.insertUserLogin(userLogin2);
+                UserLogin userLogin1 = new UserLogin();
+                BeanUtils.copyProperties(userLogin, userLogin1);
+                userLogin1.setUserId(userInfo.getUserId());
+                userLogin1.setCreateBy(userInfo.getUserName());
+                userLogin1.setModifyBy(userInfo.getUserName());
+                userLogin1.setCreateDate(date);
+                userLogin1.setModifyDate(date);
+                userLogin1.setAccount(userInfo.getUserName());
+                userLogin1.setLoginType("username");
+                userInfoDao.insertUserLogin(userLogin1);
 
-                    UserLogin userLogin3 = new UserLogin();
-                    BeanUtils.copyProperties(userLogin, userLogin3);
-                    userLogin3.setCreateDate(date);
-                    userLogin3.setModifyDate(date);
-                    userLogin3.setAccount(userInfo.getEmail());
-                    userLogin3.setLoginType("email");
-                    userInfoDao.insertUserLogin(userLogin3);
-                }
+                UserLogin userLogin2 = new UserLogin();
+                BeanUtils.copyProperties(userLogin, userLogin2);
+                userLogin2.setUserId(userInfo.getUserId());
+                userLogin2.setCreateDate(date);
+                userLogin2.setModifyDate(date);
+                userLogin2.setCreateBy(userInfo.getUserName());
+                userLogin2.setModifyBy(userInfo.getUserName());
+                userLogin2.setAccount(userInfo.getTel());
+                userLogin2.setLoginType("tel");
+                userInfoDao.insertUserLogin(userLogin2);
+
+                UserLogin userLogin3 = new UserLogin();
+                BeanUtils.copyProperties(userLogin, userLogin3);
+                userLogin3.setUserId(userInfo.getUserId());
+                userLogin3.setCreateDate(date);
+                userLogin3.setCreateBy(userInfo.getUserName());
+                userLogin3.setModifyDate(date);
+                userLogin3.setModifyBy(userInfo.getUserName());
+                userLogin3.setAccount(userInfo.getEmail());
+                userLogin3.setLoginType("email");
+                userInfoDao.insertUserLogin(userLogin3);
+                return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
             }
-            return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
-        }catch (Exception e) {
-            throw new UnicomRuntimeException(UnicomResponseEnums.FAIL_REGISTER,"注册失败");
         }
+        throw new UnicomRuntimeException(UnicomResponseEnums.FAIL_REGISTER,"注册失败");
     }
 
-
+    /**
+     * 用户修改密码
+     * @param account  账号
+     * @param oldPass  旧的密码
+     * @param newPass  新的密码
+     * @return
+     */
     public ResponseResult modifyPassword(String account, String oldPass, String newPass) {
         UserLogin userLogin = userInfoDao.userLogin(account);
         if(userLogin == null) {
@@ -116,11 +130,17 @@ public class UserInfoServiceImpl implements UserInfoService {
             if(!userLogin.getPassword().equals(oldPass)) {
                 throw new UnicomRuntimeException(UnicomResponseEnums.INVALID_PASSWORD, "输入的密码错误");
             }else {
-                userInfoDao.modifyPassword(account, newPass);
-                return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
+                Date date = new Date();
+                userLogin.setModifyDate(date);
+                UserInfo userInfo = (UserInfo) UserSession.get("currentUser");
+                userLogin.setModifyBy(userInfo.getUserName());
+                userLogin.setPassword(newPass);
+                int res = userInfoDao.modifyPassword(userLogin);
+                return new ResponseResult(true, UnicomResponseEnums.EDITPWD_SUCCESS);
             }
         }
     }
+
     /**
      * 用户登录处理服务
      * @param account 帐号
@@ -157,12 +177,17 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<UserInfo> userInfos = userInfoDao.listUserInfo();
         PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfos);
         if(pageInfo.getSize() == 0) {
-            throw new UnicomRuntimeException(UnicomResponseEnums.NO_RECORD, "数据库中没有记录");
+            throw new UnicomRuntimeException(UnicomResponseEnums.NO_RECORD, "数据库中没有用户记录");
         } else {
             return new ResponseResult(true, pageInfo);
         }
     }
 
+    /**
+     * 通过userId获取对应用户信息
+     * @param userId
+     * @return
+     */
     @Override
     public ResponseResult getUserByUserId(String userId) {
         UserInfo userInfo = userInfoDao.getUserByUserId(userId);
@@ -181,8 +206,13 @@ public class UserInfoServiceImpl implements UserInfoService {
         }else {
             return new ResponseResult(true, userInfo);
         }
-}
+    }
 
+    /**
+     * 插入用户信息
+     * @param userInfo  用户基本信息
+     * @return
+     */
     @Override
     public ResponseResult insertUserInfo(UserInfo userInfo) {
         try {
@@ -194,20 +224,27 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
     }
 
+    /**
+     * 根据userId删除对应用户信息
+     * @param userId
+     * @return
+     */
     @Override
     public ResponseResult deleteUserInfoByUserId(String userId) {
-        try {
-            int res = userInfoDao.deleteUserByUserId(userId);
-            if(res == 0) {
-                throw new UnicomRuntimeException(UnicomResponseEnums.DELETE_FAIL);
-            }else {
-                return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
-            }
-        }catch (Exception e) {
+        int res = userInfoDao.deleteUserByUserId(userId);
+        if(res == 0) {
             throw new UnicomRuntimeException(UnicomResponseEnums.DELETE_FAIL);
+        }else {
+            userInfoDao.deleteUserLoginByUserId(userId);
+            return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
         }
     }
 
+    /**
+     * 更新用户信息
+     * @param userInfo 用户基本信息
+     * @return
+     */
     @Override
     public ResponseResult updateUserInfo(UserInfo userInfo) {
         int res = userInfoDao.updateUserInfo(userInfo);

@@ -41,6 +41,10 @@
         select * from user_info where user_id = #{userId}
     </select>
 
+    <select id="getUserByAccount" resultType="UserInfo">
+        select * from user_info where user_id = (select user_id from user_login where account = #{account})
+    </select>
+
     <insert id="insertUserInfo" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="id">
         insert into user_info values(#{id},#{userId},#{userName},#{roleId},#{tel},#{email},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
     </insert>
@@ -51,6 +55,10 @@
 
     <delete id="deleteUserByUserId">
         delete from user_info where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserLoginByUserId">
+        delete from user_login where user_id = #{userId}
     </delete>
 
     <update id="updateUserInfo" parameterType="UserInfo">
@@ -76,6 +84,6 @@
     </select>
 
     <update id="modifyPassword">
-        update user_login set password = #{password} where account = #{account}
+        update user_login set password = #{password},modify_date = #{modifyDate},modify_by = #{modifyBy} where account = #{account}
     </update>
 </mapper>
