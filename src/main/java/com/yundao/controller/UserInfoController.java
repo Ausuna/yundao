@@ -24,8 +24,8 @@ public class UserInfoController {
      * @return
      */
     @PassToken
-    @GetMapping("/userLogin/{account}/{pass}")
-    public ResponseResult userLogin(@PathVariable("account") String account, @PathVariable("pass") String pass) {
+    @GetMapping("/userLogin")
+    public ResponseResult userLogin(@RequestParam("account") String account, @RequestParam("pass") String pass) {
         return userInfoService.userLogin(account, pass);
     }
 
@@ -35,8 +35,8 @@ public class UserInfoController {
      * @param pageSize   每页显示数
      * @return
      */
-    @GetMapping("/userInfo/{pageIndex}/{pageSize}")
-    public ResponseResult listUserInfo(@PathVariable("pageIndex") int pageIndex, @PathVariable("pageSize") int pageSize) {
+    @GetMapping("/userInfo")
+    public ResponseResult listUserInfo(@RequestParam("pageIndex") int pageIndex, @RequestParam("pageSize") int pageSize) {
         return userInfoService.getUserList(pageIndex, pageSize);
     }
 
@@ -45,13 +45,13 @@ public class UserInfoController {
      * @param userId
      * @return
      */
-    @GetMapping("/userInfo/{userId}")
-    public ResponseResult getUserByUserId(@PathVariable("userId") String userId) {
+    @GetMapping("/userInfo/userId")
+    public ResponseResult getUserByUserId(@RequestParam("userId") String userId) {
         return userInfoService.getUserByUserId(userId);
     }
 
-    @GetMapping("/userInfoWithLogin/{userId}")
-    public ResponseResult getUserByUserIdWithLogin(@PathVariable("userId") String userId) {
+    @GetMapping("/userInfoWithLogin")
+    public ResponseResult getUserByUserIdWithLogin(@RequestParam("userId") String userId) {
         return userInfoService.getUserByUserIdWithLogin(userId);
     }
 
@@ -82,8 +82,8 @@ public class UserInfoController {
      * @param userId
      * @return
      */
-    @DeleteMapping("/userInfo/{userId}")
-    public ResponseResult deleteUserInfoByUserId(@PathVariable("userId") String userId) {
+    @DeleteMapping("/userInfo")
+    public ResponseResult deleteUserInfoByUserId(@RequestParam("userId") String userId) {
         return userInfoService.deleteUserInfoByUserId(userId);
     }
 
@@ -104,8 +104,8 @@ public class UserInfoController {
      * @param newPass  新的密码
      * @return
      */
-    @PutMapping("/userLogin/{account}/{oldPass}/{newPass}")
-    public ResponseResult modifyPassword(@PathVariable("account") String account, @PathVariable("oldPass") String oldPass, @PathVariable("newPass") String newPass) {
+    @PutMapping("/userLogin")
+    public ResponseResult modifyPassword(@RequestParam("account") String account, @RequestParam("oldPass") String oldPass, @RequestParam("newPass") String newPass) {
         return userInfoService.modifyPassword(account, oldPass, newPass);
     }
 }

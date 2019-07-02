@@ -10,11 +10,15 @@ public interface ClassInfoService {
 
     ResponseResult insertClassInfo(ClassInfo classInfo);
 
+    ResponseResult getClassInfosByUserId(String userId);
+
     ResponseResult createClass(ClassInfo classInfo);
 
     ResponseResult joinClass(String classId);
 
     ResponseResult updateClassInfo(ClassInfo classInfo);
+
+    ResponseResult quitClass(String classId);
 
     ResponseResult deleteClassInfo(String classId);
 }

@@ -12,6 +12,7 @@ import com.yundao.common.UnicomResponseEnums;
 import com.yundao.common.UnicomRuntimeException;
 import com.yundao.dao.ClassInfoDao;
 import com.yundao.service.ClassInfoService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Autowired
     ClassInfoDao classInfoDao;
+
     public boolean checkClassParameter(ClassInfo classInfo) {
         if(classInfo.getClassName() == null) {
             throw new UnicomRuntimeException(UnicomResponseEnums.INVALID_CLASS,"无效的班级名称");
@@ -56,6 +58,21 @@ public class ClassInfoServiceImpl implements ClassInfoService {
             throw new UnicomRuntimeException(UnicomResponseEnums.NO_RECORD, "数据库中没有班级记录");
         } else {
             return new ResponseResult(true, pageInfo);
+        }
+    }
+
+    /**
+     * 获得当前用户所属的所有课程列表
+     * @param userId
+     * @return
+     */
+    @Override
+    public ResponseResult getClassInfosByUserId(String userId) {
+        List<ClassInfo> classInfos = classInfoDao.getClassInfosByUserId(userId);
+        if(!classInfos.isEmpty()) {
+            return new ResponseResult(true, classInfos);
+        }else {
+            throw new UnicomRuntimeException(UnicomResponseEnums.NO_RECORD, "还没有加入或创建任何班级");
         }
     }
 
@@ -125,21 +142,52 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         throw new UnicomRuntimeException(UnicomResponseEnums.REPEAT_JOINCLASS, "重复加入班级");
     }
 
+    /**
+     * 修改班级信息
+     * @param classInfo
+     * @return
+     */
     @Override
     public ResponseResult updateClassInfo(ClassInfo classInfo) {
+        Date date = new Date();
+        UserInfo userInfo = (UserInfo)UserSession.get("currentUser");
+        classInfo.setModifyBy(userInfo.getUserName());
+        classInfo.setModifyDate(date);
         int res = classInfoDao.updateClassInfo(classInfo);
         if(res == 0) {
-            return new ResponseResult(false, UnicomResponseEnums.UPDATE_FAIL);
+            throw new UnicomRuntimeException(UnicomResponseEnums.UPDATE_FAIL, "更新班级失败");
         }else {
             return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
         }
     }
 
+    /**
+     * 根据班级id退出班级
+     * @param classId
+     * @return
+     */
+    @Override
+    public ResponseResult quitClass(String classId) {
+        UserInfo userInfo = (UserInfo) UserSession.get("currentUser");
+        String userId = userInfo.getUserId();
+        int res = classInfoDao.quitClass(classId, userId);
+        if(res == 0) {
+            throw new UnicomRuntimeException(UnicomResponseEnums.DELETE_FAIL, "退出班级失败");
+        }else {
+            return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
+        }
+    }
+
+    /**
+     * 根据班级id删除班级
+     * @param classId
+     * @return
+     */
     @Override
     public ResponseResult deleteClassInfo(String classId) {
         int res = classInfoDao.deleteClassInfo(classId);
         if(res == 0) {
-            return new ResponseResult(false, UnicomResponseEnums.DELETE_FAIL);
+            throw new UnicomRuntimeException(UnicomResponseEnums.DELETE_FAIL, "删除班级失败");
         }else {
             return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
         }

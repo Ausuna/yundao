@@ -5,8 +5,8 @@ public class DictDetail extends BaseInfo {
     private String dictId;//数据字典编号
     private String itemId;//项目编号
     private String itemName;//项目名称
-    private String isDefault;//是否默认值
-    private String dictOrder;//项目序号
+    private byte isDefault;//是否默认值
+    private int dictOrder;//项目序号
 
     public String getDictId() {
         return dictId;
@@ -32,19 +32,19 @@ public class DictDetail extends BaseInfo {
         this.itemName = itemName;
     }
 
-    public String getIsDefault() {
+    public byte getIsDefault() {
         return isDefault;
     }
 
-    public void setIsDefault(String isDefault) {
+    public void setIsDefault(byte isDefault) {
         this.isDefault = isDefault;
     }
 
-    public String getDictOrder() {
+    public int getDictOrder() {
         return dictOrder;
     }
 
-    public void setDictOrder(String dictOrder) {
+    public void setDictOrder(int dictOrder) {
         this.dictOrder = dictOrder;
     }
 }

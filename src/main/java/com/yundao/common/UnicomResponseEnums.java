@@ -38,7 +38,9 @@ public enum  UnicomResponseEnums {
     INVALID_COURSE("027","无效的课程名称"),
     INVALID_TIME("028","无效的课时"),
     INVALID_COLLEGE("029","无效的学院名称"),
-    INVALID_TERM("030","无效的学期名称");
+    INVALID_TERM("030","无效的学期名称"),
+    INVALID_DICT("031","无效的数据字典描述"),
+    REPEAT_DICT("032","已存在此数据字典");
 
     private String code;
     private String msg;

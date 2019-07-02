@@ -12,9 +12,13 @@ public interface ClassInfoDao {
 
     List<ClassInfo> listClassInfo();
 
+    List<ClassInfo> getClassInfosByUserId(String userId);
+
     int insertClassInfo(ClassInfo classInfo);
 
     int updateClassInfo(ClassInfo classInfo);
+
+    int quitClass(String classId, String userId);
 
     int deleteClassInfo(String classId);
 

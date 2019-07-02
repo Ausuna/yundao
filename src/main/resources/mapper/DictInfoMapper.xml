@@ -3,15 +3,31 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yundao.dao.DictInfoDao">
-    <select id="listDict" resultType="com.yundao.bean.DictInfo">
+    <select id="listDict" resultType="DictInfo">
         select * from dict_info
     </select>
 
-    <select id="listDictDetail" resultType="com.yundao.bean.DictDetail">
+    <select id="listDictDetail" resultType="DictDetail">
         select * from dict_detail where dict_id = #{dictId}
     </select>
 
-    <insert id="insertDictInfo" parameterType="com.yundao.bean.DictInfo">
+    <select id="countDictDetailByDictId" resultType="int">
+        select count(*) from dict_detail where dict_id = #{dictId}
+    </select>
+
+    <insert id="insertDictInfo" parameterType="DictInfo">
         insert into dict_info values (#{id},#{dictId},#{dictDesc},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
     </insert>
+
+    <insert id="insertDictDetail" parameterType="DictDetail">
+        insert into dict_detail values (#{id},#{dictId},#{itemId},#{itemName},#{isDefault},#{dictOrder},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
+    </insert>
+
+    <select id="checkDictInfo" resultType="DictInfo">
+        select * from dict_info where dict_desc = #{dictDesc};
+    </select>
+
+    <select id="checkDictDetail" resultType="DictDetail">
+        select * from dict_detail where item_name = #{itemName} and dict_id = #{dictId};
+    </select>
 </mapper>
