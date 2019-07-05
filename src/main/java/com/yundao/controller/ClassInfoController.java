@@ -84,4 +84,14 @@ public class ClassInfoController {
         System.out.println(classId);
         return classInfoService.deleteClassInfo(classId);
     }
+
+    /**
+     * 获得班级所有的学生列表
+     * @param classId
+     * @return
+     */
+    @GetMapping("/classInfo/userInfo")
+    public ResponseResult getClassUser(@RequestParam("classId") String classId) {
+        return classInfoService.getClassUser(classId);
+    }
 }

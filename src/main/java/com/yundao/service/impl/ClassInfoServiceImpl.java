@@ -76,13 +76,18 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         }
     }
 
+    /**
+     * 获得班级所有的学生列表
+     * @param classId
+     * @return
+     */
     @Override
-    public ResponseResult insertClassInfo(ClassInfo classInfo) {
-        int res = classInfoDao.insertClassInfo(classInfo);
-        if(res == 0) {
-            return new ResponseResult(false, UnicomResponseEnums.INSERT_FAIL);
+    public ResponseResult getClassUser(String classId) {
+        List<UserInfo> userInfos = classInfoDao.getClassUser(classId);
+        if(userInfos.isEmpty()) {
+            throw new UnicomRuntimeException(UnicomResponseEnums.NO_RECORD, "班级中没有学生");
         }else {
-            return new ResponseResult(true, UnicomResponseEnums.SUCCESS_OPTION);
+            return new ResponseResult(true, userInfos);
         }
     }
 

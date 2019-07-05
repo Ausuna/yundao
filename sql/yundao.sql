@@ -90,7 +90,7 @@ create table dict_detail
 (
    id                    int not null auto_increment,
    dict_id               varchar(64) not null,
-   item_id               int,
+   item_id               varchar(64) not null,
    item_name             nvarchar(64),
    is_default            bit,
    dict_order            int,

@@ -8,7 +8,7 @@ public interface ClassInfoService {
 
     ResponseResult listClassInfo(int pageIndex, int pageSize);
 
-    ResponseResult insertClassInfo(ClassInfo classInfo);
+    ResponseResult getClassUser(String classId);
 
     ResponseResult getClassInfosByUserId(String userId);
 

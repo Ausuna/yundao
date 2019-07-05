@@ -8,11 +8,15 @@
     </select>
 
     <select id="listDictDetail" resultType="DictDetail">
-        select * from dict_detail where dict_id = #{dictId}
+        select * from dict_detail where dict_id = #{dictId} ORDER BY dict_order
     </select>
 
     <select id="countDictDetailByDictId" resultType="int">
         select count(*) from dict_detail where dict_id = #{dictId}
+    </select>
+    
+    <select id="dictDetailEditList" resultType="DictDetail">
+        select * from dict_detail where dict_id = #{dictId} and dict_order >= #{dict_order} and item_id != #{itemId} ORDER BY dict_order
     </select>
 
     <insert id="insertDictInfo" parameterType="DictInfo">
@@ -22,6 +26,27 @@
     <insert id="insertDictDetail" parameterType="DictDetail">
         insert into dict_detail values (#{id},#{dictId},#{itemId},#{itemName},#{isDefault},#{dictOrder},#{createDate},#{createBy},#{modifyDate},#{modifyBy})
     </insert>
+
+    <update id="updateDictInfo" parameterType="DictInfo">
+        update dict_info set dict_desc = #{dictDesc}, modify_by = #{modifyBy}, modify_date = #{modifyDate} where dict_id = #{dictId}
+    </update>
+
+    <update id="updateDictDetail" parameterType="DictDetail">
+        update dict_detail set item_name = #{itemName},is_default = #{isDefault},dict_order = #{dictOrder}, modify_by = #{modifyBy}, modify_date = #{modifyDate} where item_id = #{itemId}
+    </update>
+
+    <update id="updateDictDetailDefault">
+        update dict_detail set is_default = 0 where is_default = 1 and dict_id = #{dictId}
+    </update>
+
+    <delete id="deleteDictInfo">
+        delete from dict_detail where dict_id = #{dict_id};
+        delete from dict_info where dict_id = #{dict_id}
+    </delete>
+
+    <delete id="deleteDictDetail">
+        delete from dict_detail where item_id = #{itemId}
+    </delete>
 
     <select id="checkDictInfo" resultType="DictInfo">
         select * from dict_info where dict_desc = #{dictDesc};

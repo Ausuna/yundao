@@ -7,6 +7,8 @@ import com.yundao.service.DictInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class DictInfoController {
 
@@ -14,7 +16,7 @@ public class DictInfoController {
     DictInfoService dictInfoService;
 
     /**
-     * 获取字典分页数据
+     * 获取数据字典分页数据
      * @param pageIndex
      * @param pageSize
      * @return
@@ -43,7 +45,6 @@ public class DictInfoController {
      */
     @PostMapping("/dictInfo")
     public ResponseResult insertDictInfo(DictInfo dictInfo) {
-        System.out.println("sssss: "+dictInfo);
         return dictInfoService.insertDictInfo(dictInfo);
     }
 
@@ -54,9 +55,46 @@ public class DictInfoController {
      */
     @PostMapping("/dictDetail")
     public ResponseResult insertDictDetail(DictDetail dictDetail) {
-        System.out.println("sssss: "+dictDetail);
         return dictInfoService.insertDictDetail(dictDetail);
     }
 
+    /**
+     * 编辑数据字典信息
+     * @param dictInfo
+     * @return
+     */
+    @PutMapping("/dictInfo")
+    public ResponseResult updateDictInfo(DictInfo dictInfo) {
+        return dictInfoService.updateDictInfo(dictInfo);
+    }
 
+    /**
+     * 编辑数据字典详细信息
+     * @param dictDetail
+     * @return
+     */
+    @PutMapping("/dictDetail")
+    public ResponseResult updateDictInfo(DictDetail dictDetail) {
+        return dictInfoService.updateDictDetail(dictDetail);
+    }
+
+    /**
+     * 删除数据字典
+     * @param dictId
+     * @return
+     */
+    @DeleteMapping("/dictInfo")
+    public  ResponseResult deleteDictInfo(@RequestParam("dictId") String dictId) {
+        return dictInfoService.deleteDictInfo(dictId);
+    }
+
+    /**
+     * 删除数据字典详细信息
+     * @param dictDetail
+     * @return
+     */
+    @DeleteMapping("/dictDetail")
+    public  ResponseResult deleteDictDetail(DictDetail dictDetail) {
+        return dictInfoService.deleteDictDetail(dictDetail);
+    }
 }

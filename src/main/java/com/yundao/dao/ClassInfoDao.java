@@ -25,4 +25,6 @@ public interface ClassInfoDao {
     int joinClass(UserClass userClass);
 
     List<UserClass> checkUserClass(UserClass userClass);
+
+    List<UserInfo> getClassUser(String classId);
 }

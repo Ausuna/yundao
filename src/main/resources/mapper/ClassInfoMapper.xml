@@ -36,4 +36,8 @@
         delete from user_class where class_id = #{classId};
         delete from class_info where class_id = #{classId}
     </delete>
+
+    <select id="getClassUser" resultType="UserInfo">
+        select * from user_info where user_id = (select user_id from user_class where class_id = #{classId})
+    </select>
 </mapper>

@@ -18,6 +18,15 @@ public class ClassInfo extends BaseInfo{
     private UserInfo teacher;
     private TimeInfo time;
     private List<UserClass> userClasses;
+    private List<CallInfo> classCalls;
+
+    public List<CallInfo> getClassCalls() {
+        return classCalls;
+    }
+
+    public void setClassCalls(List<CallInfo> classCalls) {
+        this.classCalls = classCalls;
+    }
 
     public String getClassId() {
         return classId;

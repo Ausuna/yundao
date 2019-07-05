@@ -70,6 +70,7 @@ public class SpringExceptionHandle {
     @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
     public <T> ResponseResult<T> sendError(UnicomRuntimeException exception,HttpServletRequest request){
         String requestURI = request.getRequestURI();
+        exception.printStackTrace();
         logger.error("occurs error when execute url ={} ,message: {}",requestURI,exception.getMessage());
         return new ResponseResult<>(false,exception.getCode(),exception.getMsg());
     }

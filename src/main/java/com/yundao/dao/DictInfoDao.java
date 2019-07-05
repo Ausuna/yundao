@@ -13,11 +13,23 @@ public interface DictInfoDao {
 
     List<DictDetail> listDictDetail(String dictId);
 
+    List<DictDetail> dictDetailEditList(String dictId,String itemId, int dict_order);
+
     int insertDictInfo(DictInfo dictInfo);
 
     int insertDictDetail(DictDetail dictDetail);
 
     int countDictDetailByDictId(String dictId);
+
+    int updateDictInfo(DictInfo dictInfo);
+
+    int updateDictDetail(DictDetail dictDetail);
+
+    int updateDictDetailDefault(String dictId);
+
+    int deleteDictInfo(String dictId);
+
+    int deleteDictDetail(String itemId);
 
     List<DictInfo> checkDictInfo(String dictDesc);
 
