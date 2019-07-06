@@ -12,7 +12,6 @@ public class ClassInfoController {
     @Autowired
     ClassInfoService classInfoService;
 
-
     /**
      * 获得班级分页数据
      * @param pageIndex
